@@ -1,26 +1,162 @@
-@import "tailwindcss";
+@font-face {
+  font-family: 'Broadway';
+  src: url('/fonts/TRIAL_Oceanic-Regular-BF6487cfe600a81.otf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'FlowExt';
+  src: url('/fonts/DolomanPavljenko.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+  font-display: swap;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --foreground-rgb: 255, 255, 255;
+  --background-rgb: 0, 0, 0;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  body {
+    @apply bg-black text-white;
+    font-family: 'FlowExt', 'Broadway', system-ui, -apple-system, sans-serif;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  html {
+    scroll-behavior: smooth;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .gold-gradient {
+    background: linear-gradient(
+      45deg,
+      #976726,
+      #caa545,
+      #8b5e1c,
+      #e8b923,
+      #7a4f17
+    );
+    background-size: 200% 200%;
+    animation: gradient 15s ease infinite;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+    font-family: 'Broadway', 'FlowExt', system-ui, -apple-system, sans-serif;
+  }
+
+  .gold-border {
+    background: linear-gradient(
+      45deg,
+      #976726,
+      #caa545,
+      #8b5e1c,
+      #e8b923,
+      #7a4f17
+    );
+    background-size: 200% 200%;
+    animation: gradient 15s ease infinite;
+  }
+
+  .btn-primary {
+    @apply relative overflow-hidden transition-all duration-500;
+    background: linear-gradient(
+      45deg,
+      #976726,
+      #caa545,
+      #8b5e1c,
+      #e8b923,
+      #7a4f17
+    );
+    background-size: 200% 200%;
+    animation: gradient 15s ease infinite;
+    box-shadow: 0 4px 15px rgba(202, 165, 69, 0.3);
+    font-family: 'Broadway', 'FlowExt', system-ui, -apple-system, sans-serif;
+  }
+  
+  .btn-secondary {
+    @apply border-2 px-6 py-2 rounded-full transition-all duration-500;
+    border-image: linear-gradient(
+      45deg,
+      #976726,
+      #caa545,
+      #8b5e1c,
+      #e8b923,
+      #7a4f17
+    ) 1;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    font-family: 'Broadway', 'FlowExt', system-ui, -apple-system, sans-serif;
 }
+
+  .gold-hover {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .gold-hover::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+      90deg,
+      transparent,
+      rgba(202, 165, 69, 0.2),
+      transparent
+    );
+    transition: 0.5s;
+  }
+
+  .gold-hover:hover::after {
+    left: 100%;
+  }
+
+  .nav-gold-underline {
+    position: relative;
+    transition: color 0.3s;
+  }
+  .nav-gold-underline::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -2px;
+    width: 0;
+    height: 2px;
+    background: linear-gradient(90deg, #caa545, #e8b923, #8b5e1c);
+    border-radius: 2px;
+    transition: width 0.4s cubic-bezier(.4,0,.2,1);
+    z-index: 1;
+  }
+  .nav-gold-underline:hover::after,
+  .nav-gold-underline:focus::after {
+    width: 100%;
+  }
+  .nav-gold-underline:hover,
+  .nav-gold-underline:focus {
+    color: #ffe9a7;
+    text-shadow: 0 0 8px #caa545, 0 0 16px #e8b923;
+  }
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+}
+}
+
