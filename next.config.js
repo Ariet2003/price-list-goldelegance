@@ -9,6 +9,7 @@ const nextConfig = {
         pathname: '/api/portraits/**',
       },
     ],
+    unoptimized: true, // Отключаем оптимизацию изображений для локальных файлов
   },
 };
 

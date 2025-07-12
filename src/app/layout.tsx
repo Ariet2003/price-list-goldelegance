@@ -1,19 +1,23 @@
-import type { Metadata } from "next";
-import "./globals.css";
+import './globals.css';
+import { Inter } from 'next/font/google';
+import { Toaster } from 'react-hot-toast';
 
-export const metadata: Metadata = {
-  title: "GOLD ELEGANCE - Event Decoration Services",
-  description: "GOLD ELEGANCE company decorates all types of events with premium quality and elegant design",
+const inter = Inter({ subsets: ['latin'] });
+
+export const metadata = {
+  title: 'Gold Elegance',
+  description: 'Эксклюзивное оформление мероприятий',
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode;
-}>) {
+}) {
   return (
-    <html lang="en">
-      <body className="font-primary antialiased">
+    <html lang="ru">
+      <body className={inter.className}>
+        <Toaster position="top-right" />
         {children}
       </body>
     </html>

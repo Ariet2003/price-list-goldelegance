@@ -41,24 +41,24 @@ const FAQ = () => {
   const [openId, setOpenId] = useState<number | null>(null);
 
   return (
-    <section className="py-20 bg-black" id="faq">
+    <section className="py-12 sm:py-16 md:py-20 bg-black" id="faq">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-8 sm:mb-12 md:mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold gold-gradient mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold gold-gradient mb-4 sm:mb-6">
             Часто задаваемые вопросы
           </h2>
-          <p className="text-lg text-gray-400 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg text-gray-400 max-w-3xl mx-auto px-4">
             Ответы на популярные вопросы о наших услугах и процессе работы
           </p>
         </motion.div>
 
-        <div className="max-w-4xl mx-auto space-y-4">
+        <div className="max-w-4xl mx-auto space-y-3 sm:space-y-4">
           {faqs.map((faq) => (
             <motion.div
               key={faq.id}
@@ -70,18 +70,18 @@ const FAQ = () => {
             >
               <button
                 onClick={() => setOpenId(openId === faq.id ? null : faq.id)}
-                className="w-full bg-black/40 backdrop-blur-sm rounded-xl p-6 text-left border border-[#976726]/20 hover:border-[#976726]/40 transition-all duration-500 group-hover:bg-gradient-to-r group-hover:from-[#976726]/5 group-hover:via-[#e8b923]/5 group-hover:to-[#976726]/5"
+                className="w-full bg-black/40 backdrop-blur-sm rounded-lg sm:rounded-xl p-4 sm:p-6 text-left border border-[#976726]/20 hover:border-[#976726]/40 transition-all duration-500 group-hover:bg-gradient-to-r group-hover:from-[#976726]/5 group-hover:via-[#e8b923]/5 group-hover:to-[#976726]/5"
               >
                 <div className="flex justify-between items-center">
-                  <h3 className="text-lg font-medium text-[#caa545] group-hover:text-[#e8b923] transition-colors duration-300">
+                  <h3 className="text-base sm:text-lg font-medium text-[#caa545] group-hover:text-[#e8b923] transition-colors duration-300 pr-8">
                     {faq.question}
                   </h3>
                   <motion.div
                     animate={{ rotate: openId === faq.id ? 180 : 0 }}
                     transition={{ duration: 0.3 }}
-                    className="flex-shrink-0 ml-4"
+                    className="flex-shrink-0 absolute right-4 sm:right-6"
                   >
-                    <FaChevronDown className="w-5 h-5 text-[#976726]" />
+                    <FaChevronDown className="w-4 h-4 sm:w-5 sm:h-5 text-[#976726]" />
                   </motion.div>
                 </div>
                 <AnimatePresence>
@@ -93,7 +93,7 @@ const FAQ = () => {
                       transition={{ duration: 0.3 }}
                       className="overflow-hidden"
                     >
-                      <p className="mt-4 text-gray-400 leading-relaxed">
+                      <p className="mt-3 sm:mt-4 text-sm sm:text-base text-gray-400 leading-relaxed">
                         {faq.answer}
                       </p>
                     </motion.div>

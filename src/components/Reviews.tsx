@@ -88,93 +88,96 @@ export default function Reviews() {
   }
 
   return (
-    <section className="py-20 bg-black" id="reviews">
+    <section className="py-12 sm:py-16 md:py-20 bg-black" id="reviews">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.8 }}
-          className="text-center mb-16"
+          className="text-center mb-8 sm:mb-12 md:mb-16"
         >
-          <h2 className="text-3xl md:text-4xl font-bold gold-gradient mb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold gold-gradient mb-4 sm:mb-6">
             Отзывы наших клиентов
           </h2>
-          <p className="text-lg text-gray-400 max-w-3xl mx-auto">
+          <p className="text-base sm:text-lg text-gray-400 max-w-3xl mx-auto px-4">
             Мы гордимся тем, что создаем незабываемые моменты для наших клиентов. 
             Вот что они говорят о нашей работе.
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {reviews.map((review, index) => (
-            <motion.div
-              key={review.id}
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.2 }}
-              whileHover={{ 
-                scale: 1.02,
-                boxShadow: "0 8px 32px rgba(151, 103, 38, 0.15)",
-              }}
-              className="bg-black/40 backdrop-blur-sm rounded-xl p-8 relative group cursor-pointer border border-transparent transition-all duration-500 hover:border-[#976726]/30 before:absolute before:inset-0 before:rounded-xl before:transition-all before:duration-500 before:opacity-0 hover:before:opacity-100 before:bg-gradient-to-r before:from-[#976726]/5 before:via-[#e8b923]/5 before:to-[#976726]/5 before:-z-10"
-            >
-              <motion.div 
-                className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-20 transition-all duration-500"
-                style={{
-                  background: 'linear-gradient(45deg, rgba(151, 103, 38, 0.2), rgba(232, 185, 35, 0.2))',
+        <div className="overflow-x-auto pb-4 -mx-4 px-4 sm:px-0 scrollbar-hide">
+          <div className="flex flex-nowrap gap-4 sm:gap-6 min-w-full sm:grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+            {reviews.map((review, index) => (
+              <motion.div
+                key={review.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.2 }}
+                whileHover={{ 
+                  scale: 1.02,
+                  boxShadow: "0 8px 32px rgba(151, 103, 38, 0.15)",
                 }}
-              />
-              
-              <div className="flex items-center mb-6">
-                <motion.div 
-                  className="relative w-14 h-14 rounded-full overflow-hidden border-2 border-[#976726]/20 transition-all duration-500 group-hover:border-[#976726]/40 group-hover:shadow-lg group-hover:shadow-[#976726]/20"
-                  whileHover={{ scale: 1.1 }}
-                  transition={{ type: "spring", stiffness: 400, damping: 17 }}
-                >
-                  <Image
-                    src={review.image}
-                    alt={review.name}
-                    fill
-                    className="object-cover rounded-full transition-all duration-500 group-hover:scale-110"
-                  />
-                </motion.div>
-                <div className="ml-4">
-                  <motion.h3 
-                    className="text-base font-medium text-[#caa545] transition-all duration-300"
-                    whileHover={{ color: "#e8b923" }}
-                  >
-                    {review.name}
-                  </motion.h3>
-                  <p className="text-sm text-gray-500 transition-all duration-300 group-hover:text-gray-400">
-                    {review.role}
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex mb-4 space-x-1">{renderStars(review.rating)}</div>
-
-              <p className="text-gray-400 leading-relaxed text-sm transition-all duration-300 group-hover:text-gray-300">
-                {review.content}
-              </p>
-
-              <motion.div 
-                className="absolute top-4 right-4 opacity-10 transition-all duration-300 group-hover:opacity-30"
-                initial={{ rotate: 0 }}
-                whileHover={{ rotate: 15, scale: 1.2 }}
-                transition={{ type: "spring", stiffness: 200, damping: 10 }}
+                className="bg-black/40 backdrop-blur-sm rounded-lg sm:rounded-xl p-6 sm:p-8 relative group cursor-pointer border border-transparent transition-all duration-500 hover:border-[#976726]/30 before:absolute before:inset-0 before:rounded-xl before:transition-all before:duration-500 before:opacity-0 hover:before:opacity-100 before:bg-gradient-to-r before:from-[#976726]/5 before:via-[#e8b923]/5 before:to-[#976726]/5 before:-z-10 flex-none w-[280px] sm:w-auto"
               >
-                <svg
-                  className="w-8 h-8 text-[#976726] group-hover:text-[#caa545] transition-colors duration-300"
-                  fill="currentColor"
-                  viewBox="0 0 24 24"
+                <motion.div 
+                  className="absolute inset-0 rounded-lg sm:rounded-xl opacity-0 group-hover:opacity-20 transition-all duration-500"
+                  style={{
+                    background: 'linear-gradient(45deg, rgba(151, 103, 38, 0.2), rgba(232, 185, 35, 0.2))',
+                  }}
+                />
+                
+                <div className="flex items-center mb-4 sm:mb-6">
+                  <motion.div 
+                    className="relative w-12 h-12 sm:w-14 sm:h-14 rounded-full overflow-hidden border-2 border-[#976726]/20 transition-all duration-500 group-hover:border-[#976726]/40 group-hover:shadow-lg group-hover:shadow-[#976726]/20"
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ type: "spring", stiffness: 400, damping: 17 }}
+                  >
+                    <Image
+                      src={review.image}
+                      alt={review.name}
+                      fill
+                      sizes="(max-width: 640px) 48px, 56px"
+                      className="object-cover rounded-full transition-all duration-500 group-hover:scale-110"
+                    />
+                  </motion.div>
+                  <div className="ml-3 sm:ml-4">
+                    <motion.h3 
+                      className="text-sm sm:text-base font-medium text-[#caa545] transition-all duration-300"
+                      whileHover={{ color: "#e8b923" }}
+                    >
+                      {review.name}
+                    </motion.h3>
+                    <p className="text-xs sm:text-sm text-gray-500 transition-all duration-300 group-hover:text-gray-400">
+                      {review.role}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex mb-3 sm:mb-4 space-x-1">{renderStars(review.rating)}</div>
+
+                <p className="text-xs sm:text-sm text-gray-400 leading-relaxed transition-all duration-300 group-hover:text-gray-300">
+                  {review.content}
+                </p>
+
+                <motion.div
+                  className="absolute top-3 sm:top-4 right-3 sm:right-4 opacity-10 transition-all duration-300 group-hover:opacity-30"
+                  initial={{ rotate: 0 }}
+                  whileHover={{ rotate: 15, scale: 1.2 }}
+                  transition={{ type: "spring", stiffness: 200, damping: 10 }}
                 >
-                  <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
-                </svg>
+                  <svg
+                    className="w-6 h-6 sm:w-8 sm:h-8 text-[#976726] group-hover:text-[#caa545] transition-colors duration-300"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z" />
+                  </svg>
+                </motion.div>
               </motion.div>
-            </motion.div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>

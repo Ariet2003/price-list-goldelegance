@@ -35,29 +35,29 @@ export default function About() {
   ];
 
   return (
-    <section className="py-20 bg-black" id="about">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+    <section className="relative py-12 sm:py-16 md:py-20 bg-black z-[1]" id="about">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
           {/* Text Content */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="space-y-8"
+            className="space-y-6 sm:space-y-8"
           >
             <div>
-              <h2 className="text-3xl md:text-4xl font-bold gold-gradient mb-6">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold gold-gradient mb-4 sm:mb-6">
                 О компании GOLD ELEGANCE
               </h2>
-              <p className="text-lg text-gray-300">
+              <p className="text-base sm:text-lg text-gray-300">
                 Мы специализируемся на создании уникального декора для всех видов мероприятий. 
                 Наша команда профессионалов превращает любое пространство в волшебное место, 
                 где каждая деталь продумана до мелочей.
               </p>
             </div>
 
-            <div className="grid gap-8">
+            <div className="grid gap-6 sm:gap-8">
               {features.map((feature, index) => (
                 <motion.div
                   key={feature.title}
@@ -65,18 +65,18 @@ export default function About() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ duration: 0.5, delay: index * 0.2 }}
-                  className="flex items-start"
+                  className="flex items-start space-x-4"
                 >
                   <div className="flex-shrink-0">
-                    <div className="flex items-center justify-center h-12 w-12 rounded-xl gold-border p-[1px] bg-gradient-to-br from-[#976726] to-[#e8b923]">
+                    <div className="flex items-center justify-center h-10 w-10 sm:h-12 sm:w-12 rounded-xl gold-border p-[1px] bg-gradient-to-br from-[#976726] to-[#e8b923]">
                       <div className="w-full h-full rounded-xl bg-black flex items-center justify-center">
                         {feature.icon}
                       </div>
                     </div>
                   </div>
-                  <div className="ml-4">
-                    <h3 className="text-lg font-medium gold-gradient">{feature.title}</h3>
-                    <p className="mt-2 text-gray-400">{feature.description}</p>
+                  <div>
+                    <h3 className="text-base sm:text-lg font-medium gold-gradient">{feature.title}</h3>
+                    <p className="mt-1 sm:mt-2 text-sm sm:text-base text-gray-400">{feature.description}</p>
                   </div>
                 </motion.div>
               ))}
@@ -85,71 +85,71 @@ export default function About() {
 
           {/* Image Grid */}
           <motion.div
-            className="grid grid-cols-2 gap-4"
+            className="grid grid-cols-2 gap-3 sm:gap-4 mt-8 lg:mt-0 relative z-[1]"
             initial={{ opacity: 0, x: 50 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
           >
-            <div className="space-y-4">
-              <motion.div 
-                className="aspect-square relative rounded-lg overflow-hidden gold-border p-[1px]"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
+            <div className="space-y-3 sm:space-y-4">
+              <div 
+                className="aspect-square relative rounded-lg overflow-hidden gold-border p-[1px] bg-black"
               >
                 <div className="absolute inset-0 rounded-lg overflow-hidden">
                   <Image
                     src="/images/decoration-1.jpg"
                     alt="Декорация мероприятия"
                     fill
-                    className="object-cover transition-transform duration-300 hover:scale-110"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover md:transition-transform md:duration-300 md:hover:scale-110"
+                    style={{ zIndex: 1 }}
                   />
                 </div>
-              </motion.div>
-              <motion.div 
-                className="aspect-square relative rounded-lg overflow-hidden gold-border p-[1px]"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
+              </div>
+              <div 
+                className="aspect-square relative rounded-lg overflow-hidden gold-border p-[1px] bg-black"
               >
                 <div className="absolute inset-0 rounded-lg overflow-hidden">
                   <Image
                     src="/images/decoration-2.jpg"
                     alt="Оформление праздника"
                     fill
-                    className="object-cover transition-transform duration-300 hover:scale-110"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover md:transition-transform md:duration-300 md:hover:scale-110"
+                    style={{ zIndex: 1 }}
                   />
                 </div>
-              </motion.div>
+              </div>
             </div>
-            <div className="space-y-4 mt-8">
-              <motion.div 
-                className="aspect-square relative rounded-lg overflow-hidden gold-border p-[1px]"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
+            <div className="space-y-3 sm:space-y-4 mt-4 sm:mt-8">
+              <div 
+                className="aspect-square relative rounded-lg overflow-hidden gold-border p-[1px] bg-black"
               >
                 <div className="absolute inset-0 rounded-lg overflow-hidden">
                   <Image
                     src="/images/decoration-3.jpg"
                     alt="Свадебная декорация"
                     fill
-                    className="object-cover transition-transform duration-300 hover:scale-110"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover md:transition-transform md:duration-300 md:hover:scale-110"
+                    style={{ zIndex: 1 }}
                   />
                 </div>
-              </motion.div>
-              <motion.div 
-                className="aspect-square relative rounded-lg overflow-hidden gold-border p-[1px]"
-                whileHover={{ scale: 1.02 }}
-                transition={{ duration: 0.3 }}
+              </div>
+              <div 
+                className="aspect-square relative rounded-lg overflow-hidden gold-border p-[1px] bg-black"
               >
                 <div className="absolute inset-0 rounded-lg overflow-hidden">
                   <Image
                     src="/images/decoration-4.jpg"
                     alt="Праздничное оформление"
                     fill
-                    className="object-cover transition-transform duration-300 hover:scale-110"
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover md:transition-transform md:duration-300 md:hover:scale-110"
+                    style={{ zIndex: 1 }}
                   />
                 </div>
-              </motion.div>
+              </div>
             </div>
           </motion.div>
         </div>

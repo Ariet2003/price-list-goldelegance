@@ -79,16 +79,19 @@ const Footer = () => {
               viewport={{ once: true }}
               className="flex items-center space-x-2 cursor-pointer"
             >
-              <Image 
-                src="/logo.png" 
-                alt="Gold Elegance" 
-                width={40} 
-                height={40} 
-                className="rounded-full"
-              />
-              <span className="text-2xl font-bold gold-gradient">
-                GOLD ELEGANCE
-              </span>
+              {/* Logo and Text */}
+              <div className="flex flex-col items-center gap-2">
+                <Image 
+                  src="/logo.svg" 
+                  alt="Gold Elegance" 
+                  width={40} 
+                  height={40} 
+                  className="rounded-full"
+                />
+                <span className="text-xl font-bold gold-gradient">
+                  GOLD ELEGANCE
+                </span>
+              </div>
             </motion.a>
             <p className="text-gray-400 text-sm">
               Создаем незабываемую атмосферу для ваших мероприятий. Профессиональное оформление любых торжеств с безупречным вкусом и вниманием к деталям.
