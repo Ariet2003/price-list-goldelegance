@@ -46,6 +46,9 @@ export default function Header() {
         // переходим на главную и добавляем якорь в URL
         router.push('/' + href);
       }
+    } else {
+      // Для обычных ссылок
+      router.push(href);
     }
   };
 
@@ -97,8 +100,8 @@ export default function Header() {
             {/* Contact Button */}
             <div className="flex items-center space-x-4">
               <motion.a
-                href="#contact"
-                onClick={(e) => handleNavClick(e, '#contact')}
+                href="/catalog"
+                onClick={(e) => handleNavClick(e, '/catalog')}
                 className="hidden md:block btn-primary px-6 py-2 rounded-full text-black hover:scale-105 transition-transform cursor-pointer"
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
@@ -161,8 +164,8 @@ export default function Header() {
                 </div>
                 
                 <motion.a
-                  href="#contact"
-                  onClick={(e) => handleNavClick(e, '#contact')}
+                  href="/catalog"
+                  onClick={(e) => handleNavClick(e, '/catalog')}
                   className="btn-primary w-full text-center py-3 rounded-full text-black mt-4"
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}

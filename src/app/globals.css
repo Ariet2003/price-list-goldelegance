@@ -1,3 +1,5 @@
+@import '../styles/phone-input.css';
+
 @font-face {
   font-family: 'Broadway';
   src: url('/fonts/TRIAL_Oceanic-Regular-BF6487cfe600a81.otf') format('truetype');

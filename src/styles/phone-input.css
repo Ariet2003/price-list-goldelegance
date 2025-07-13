@@ -1,0 +1,34 @@
+.phone-input {
+  @apply relative w-full;
+}
+
+.phone-input .PhoneInputInput {
+  @apply w-full px-4 py-3 bg-black border border-[#976726]/40 rounded-lg focus:outline-none focus:border-[#e8b923] text-white placeholder-[#976726]/60;
+  padding-left: 4.5rem;
+}
+
+.phone-input .PhoneInputCountry {
+  @apply absolute left-0 top-0 bottom-0 flex items-center pl-4 pr-2;
+}
+
+.phone-input .PhoneInputCountrySelect {
+  @apply bg-black text-white cursor-pointer focus:outline-none;
+}
+
+.phone-input .PhoneInputCountryIcon {
+  @apply w-5 h-4 mr-1;
+}
+
+.phone-input .PhoneInputCountrySelectArrow {
+  @apply border-t-[#976726];
+}
+
+/* Стили для плейсхолдера */
+.phone-input .PhoneInputInput::placeholder {
+  @apply text-[#976726]/60;
+}
+
+/* Стили для выпадающего списка */
+.phone-input .PhoneInputCountrySelect option {
+  @apply bg-black text-white;
+} 

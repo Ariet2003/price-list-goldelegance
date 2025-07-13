@@ -1,8 +1,16 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import { useRouter } from 'next/navigation';
 
 export default function Hero() {
+  const router = useRouter();
+
+  const handleServicesClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    router.push('/catalog');
+  };
+
   return (
     <section className="relative min-h-[100svh] flex items-center justify-center overflow-hidden bg-black">
       {/* Background with overlay */}
@@ -35,12 +43,12 @@ export default function Hero() {
           transition={{ duration: 0.8, delay: 0.4 }}
           className="relative"
         >
-          <a
-            href="#services"
+          <button
+            onClick={handleServicesClick}
             className="btn-primary px-6 sm:px-8 py-2.5 sm:py-3 rounded-full text-base sm:text-lg font-medium inline-block text-black hover:scale-105 transition-transform"
           >
             Наши услуги
-          </a>
+          </button>
         </motion.div>
       </div>
     </section>

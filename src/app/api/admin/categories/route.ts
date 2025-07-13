@@ -8,26 +8,31 @@ export async function GET(request: Request) {
     const limit = 50;
     const skip = (page - 1) * limit;
 
-    const [categories, total] = await Promise.all([
-      prisma.category.findMany({
-        include: {
-          products: {
-            select: {
-              id: true,
-            },
+    // Получаем все категории с количеством товаров
+    const categories = await prisma.category.findMany({
+      include: {
+        _count: {
+          select: {
+            products: true
+          }
+        },
+        products: {
+          select: {
+            id: true,
           },
         },
-        orderBy: {
-          name: 'asc',
-        },
-        take: limit,
-        skip,
-      }),
-      prisma.category.count(),
-    ]);
+      },
+    });
+
+    // Сортируем категории по количеству товаров
+    const sortedCategories = categories
+      .sort((a, b) => b._count.products - a._count.products)
+      .slice(skip, skip + limit);
+
+    const total = categories.length;
 
     return NextResponse.json({
-      categories,
+      categories: sortedCategories,
       pagination: {
         total,
         pages: Math.ceil(total / limit),
