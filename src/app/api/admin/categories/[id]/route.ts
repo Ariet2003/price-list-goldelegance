@@ -65,6 +65,9 @@ export async function DELETE(
         id: true,
         images: true
       }
+    }).catch(error => {
+      console.error('Error fetching products:', error);
+      throw new Error('Failed to fetch products');
     });
 
     // Delete all images from ImgBB for all products in the category
@@ -91,6 +94,9 @@ export async function DELETE(
       where: {
         categoryId: categoryId
       }
+    }).catch(error => {
+      console.error('Error deleting products:', error);
+      throw new Error('Failed to delete products');
     });
 
     // Delete the category
@@ -98,14 +104,20 @@ export async function DELETE(
       where: {
         id: categoryId
       }
+    }).catch(error => {
+      console.error('Error deleting category:', error);
+      throw new Error('Failed to delete category');
     });
 
     return NextResponse.json({ message: 'Category deleted successfully' });
   } catch (error) {
-    console.error('Error deleting category:', error);
+    console.error('Error in DELETE operation:', error);
     return NextResponse.json(
-      { error: 'Failed to delete category' },
+      { error: error instanceof Error ? error.message : 'Failed to delete category' },
       { status: 500 }
     );
+  } finally {
+    // Disconnect Prisma client after operation
+    await prisma.$disconnect();
   }
 } 

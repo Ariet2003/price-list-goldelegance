@@ -36,6 +36,9 @@ export async function GET(
       include: {
         category: true
       }
+    }).catch(error => {
+      console.error('Error fetching product:', error);
+      throw new Error('Failed to fetch product');
     });
 
     if (!product) {
@@ -47,11 +50,13 @@ export async function GET(
 
     return NextResponse.json(product);
   } catch (error) {
-    console.error('Error fetching product:', error);
+    console.error('Error in GET operation:', error);
     return NextResponse.json(
-      { error: 'Failed to fetch product' },
+      { error: error instanceof Error ? error.message : 'Failed to fetch product' },
       { status: 500 }
     );
+  } finally {
+    await prisma.$disconnect();
   }
 }
 
@@ -64,6 +69,9 @@ export async function DELETE(
       where: {
         id: parseInt(params.id)
       }
+    }).catch(error => {
+      console.error('Error fetching product:', error);
+      throw new Error('Failed to fetch product');
     });
 
     if (product) {
@@ -89,6 +97,9 @@ export async function DELETE(
         where: {
           id: parseInt(params.id)
         }
+      }).catch(error => {
+        console.error('Error deleting product:', error);
+        throw new Error('Failed to delete product');
       });
 
       return NextResponse.json({ message: 'Product deleted successfully' });
@@ -99,11 +110,13 @@ export async function DELETE(
       { status: 404 }
     );
   } catch (error) {
-    console.error('Error deleting product:', error);
+    console.error('Error in DELETE operation:', error);
     return NextResponse.json(
-      { error: 'Failed to delete product' },
+      { error: error instanceof Error ? error.message : 'Failed to delete product' },
       { status: 500 }
     );
+  } finally {
+    await prisma.$disconnect();
   }
 }
 
@@ -127,14 +140,19 @@ export async function PATCH(
         inStock,
         images,
       }
+    }).catch(error => {
+      console.error('Error updating product:', error);
+      throw new Error('Failed to update product');
     });
 
     return NextResponse.json(product);
   } catch (error) {
-    console.error('Error updating product:', error);
+    console.error('Error in PATCH operation:', error);
     return NextResponse.json(
-      { error: 'Failed to update product' },
+      { error: error instanceof Error ? error.message : 'Failed to update product' },
       { status: 500 }
     );
+  } finally {
+    await prisma.$disconnect();
   }
 } 
