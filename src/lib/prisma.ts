@@ -8,11 +8,6 @@ const prismaClientSingleton = () => {
   return new PrismaClient({
     log: ['error'],
     errorFormat: 'minimal',
-    datasources: {
-      db: {
-        url: process.env.DATABASE_URL
-      }
-    }
   });
 };
 

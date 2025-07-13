@@ -1,8 +1,8 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-// Configure route to use Edge Runtime
-export const runtime = 'edge';
+// Configure route to use Node.js runtime
+export const runtime = 'nodejs';
 
 interface ImageData {
   url: string;
