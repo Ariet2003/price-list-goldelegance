@@ -71,7 +71,7 @@ export default function Sidebar() {
                 <Link 
                   href={item.href}
                   className={`
-                    group flex items-center px-4 py-3 rounded-lg relative overflow-hidden
+                    group flex items-center px-4 py-3 rounded-lg relative
                     ${isActive 
                       ? 'bg-gradient-to-r from-yellow-950/50 to-yellow-900/30 border border-yellow-600/30' 
                       : 'hover:bg-yellow-950/20 border border-transparent hover:border-yellow-900/20'
@@ -81,13 +81,17 @@ export default function Sidebar() {
                   {isActive && (
                     <motion.div
                       layoutId="activeBackground"
-                      className="absolute inset-0 bg-gradient-to-r from-yellow-950/50 to-yellow-900/30"
+                      className="absolute inset-0 bg-gradient-to-r from-yellow-950/50 to-yellow-900/30 rounded-lg"
                       initial={false}
-                      transition={{ duration: 0.3 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 30
+                      }}
                     />
                   )}
                   
-                  <div className="relative flex items-center">
+                  <div className="relative flex items-center w-full">
                     <Icon 
                       className={`
                         w-5 h-5 transition-transform duration-300 group-hover:scale-110
@@ -102,16 +106,22 @@ export default function Sidebar() {
                     >
                       {item.label}
                     </span>
-                  </div>
 
-                  {isActive && (
-                    <motion.div
-                      layoutId="activeIndicator"
-                      className="absolute right-0 top-1/2 -translate-y-1/2 w-1 h-8 bg-gradient-to-b from-yellow-400 to-yellow-600"
-                      initial={false}
-                      transition={{ duration: 0.3 }}
-                    />
-                  )}
+                    <div className="absolute right-0 h-full flex items-center">
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeIndicator"
+                          className="w-1 h-8 bg-gradient-to-b from-yellow-400 to-yellow-600 rounded-full"
+                          initial={false}
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 30
+                          }}
+                        />
+                      )}
+                    </div>
+                  </div>
                 </Link>
               </motion.li>
             );

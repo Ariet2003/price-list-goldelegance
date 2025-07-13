@@ -26,7 +26,7 @@ model Category {
 model Product {
   id          Int      @id @default(autoincrement())
   name        String
-  images      Json[]   // Array of image URLs/paths
+  images      Json[]   // Array of objects containing image URL and delete URL
   description String
   price       Decimal  @db.Decimal(10, 2)
   inStock     Boolean  @default(true)

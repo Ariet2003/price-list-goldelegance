@@ -76,7 +76,7 @@ export default function DashboardPage() {
   return (
     <div className="p-8 space-y-8">
       <motion.h1 
-        className="text-3xl font-bold text-white mb-8"
+        className="text-3xl font-bold gold-gradient mb-8"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >

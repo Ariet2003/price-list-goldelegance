@@ -84,8 +84,8 @@ const Footer = () => {
                 <Image 
                   src="/logo.svg" 
                   alt="Gold Elegance" 
-                  width={40} 
-                  height={40} 
+                  width={80} 
+                  height={80} 
                   className="rounded-full"
                 />
                 <span className="text-xl font-bold gold-gradient">
