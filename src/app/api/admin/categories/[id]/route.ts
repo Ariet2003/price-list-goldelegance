@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
+import { Prisma } from '@prisma/client';
 
 interface ImageData {
   url: string;
@@ -58,7 +59,10 @@ export async function DELETE(
 
     // Delete all images from ImgBB for all products in the category
     for (const product of products) {
-      const images = product.images as ImageData[];
+      const images = (product.images as Prisma.JsonValue[]).map(img => {
+        const imgData = img as unknown as ImageData;
+        return imgData;
+      });
       await Promise.all(images.map(image => deleteImageFromImgBB(image.deleteUrl)));
     }
 

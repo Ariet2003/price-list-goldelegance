@@ -114,16 +114,16 @@ export default function SettingsPage() {
       className="p-8 space-y-8"
     >
       <motion.h1 
-        className="text-3xl font-bold gold-gradient"
+        className="text-3xl font-bold gold-gradient mb-8"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
         Настройки
       </motion.h1>
 
-      <div className="grid gap-8 md:grid-cols-2">
+      <div className="grid gap-8 lg:grid-cols-2">
         {/* Форма изменения пароля */}
-        <div className="bg-black/50 border border-[#976726]/20 rounded-xl backdrop-blur-lg p-6">
+        <div className="bg-black/50 border border-[#976726]/20 rounded-xl backdrop-blur-lg p-4 sm:p-6">
           <h2 className="text-xl font-semibold text-[#e8b923] mb-6">Изменить пароль</h2>
           
           <form onSubmit={handleSubmit} className="space-y-4">

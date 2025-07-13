@@ -74,7 +74,7 @@ export default function DashboardPage() {
   if (!stats) return null;
 
   return (
-    <div className="p-8 space-y-8">
+    <div className="p-4 sm:p-8 space-y-8">
       <motion.h1 
         className="text-3xl font-bold gold-gradient mb-8"
         initial={{ opacity: 0, y: -20 }}
@@ -83,7 +83,7 @@ export default function DashboardPage() {
         Панель управления
       </motion.h1>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
         <StatsCard
           title="Всего товаров"
           value={stats.totalProducts}
@@ -110,7 +110,7 @@ export default function DashboardPage() {
         />
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
         <ChartCard
           title="Товары по категориям"
           data={stats.categoryData}

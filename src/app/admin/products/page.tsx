@@ -13,10 +13,10 @@ export default function ProductsPage() {
     <motion.div
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      className="p-8 space-y-8"
+      className="p-4 sm:p-8 space-y-8"
     >
       <motion.h1 
-        className="text-3xl font-bold gold-gradient"
+        className="text-3xl font-bold gold-gradient mb-8"
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
       >
@@ -32,19 +32,19 @@ export default function ProductsPage() {
           transition={{ type: "spring", stiffness: 400, damping: 10 }}
         >
           <Plus size={20} />
-          <span>Добавить товар</span>
+          <span className="hidden sm:inline">Добавить товар</span>
         </motion.button>
       </div>
 
       {isFormOpen && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
           <div className="fixed inset-0 overflow-y-auto">
             <div className="flex min-h-full items-center justify-center p-4">
               <motion.div 
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
-                className="bg-black/50 backdrop-blur-lg rounded-xl border border-[#976726]/20 p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative"
+                className="bg-black/50 backdrop-blur-lg rounded-xl border border-[#976726]/20 p-4 sm:p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative"
               >
                 <ProductForm onClose={() => setIsFormOpen(false)} />
               </motion.div>
@@ -53,7 +53,7 @@ export default function ProductsPage() {
         </div>
       )}
 
-      <div className="bg-black/50 border border-[#976726]/20 rounded-xl backdrop-blur-lg">
+      <div className="bg-black/50 border border-[#976726]/20 rounded-xl backdrop-blur-lg overflow-hidden">
         <ProductList />
       </div>
     </motion.div>
