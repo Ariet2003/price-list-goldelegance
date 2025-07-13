@@ -6,15 +6,21 @@ interface ImageData {
   deleteUrl: string;
 }
 
+// Helper function to validate image data
+function isImageData(obj: any): obj is ImageData {
+  return typeof obj === 'object' && obj !== null &&
+    typeof obj.url === 'string' && 
+    typeof obj.deleteUrl === 'string';
+}
+
 async function deleteImageFromImgBB(deleteUrl: string) {
   try {
     const response = await fetch(deleteUrl);
     if (!response.ok) {
-      throw new Error('Failed to delete image');
+      console.error('Failed to delete image from ImgBB:', await response.text());
     }
   } catch (error) {
     console.error('Error deleting image from ImgBB:', error);
-    // We don't throw here to continue with category deletion even if image deletion fails
   }
 }
 
@@ -48,31 +54,53 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    const id = parseInt(params.id);
+    const categoryId = parseInt(params.id);
 
-    // Get all products in the category to access their images
+    // Get all products in the category
     const products = await prisma.product.findMany({
-      where: { categoryId: id },
-      select: { images: true }
+      where: {
+        categoryId: categoryId
+      },
+      select: {
+        id: true,
+        images: true
+      }
     });
 
     // Delete all images from ImgBB for all products in the category
     for (const product of products) {
-      const images = product.images as ImageData[];
+      const images = product.images.map(img => {
+        // If the image is a string, try to parse it
+        if (typeof img === 'string') {
+          try {
+            const parsed = JSON.parse(img);
+            return isImageData(parsed) ? parsed : null;
+          } catch {
+            return null;
+          }
+        }
+        // If it's already an object, validate it
+        return isImageData(img) ? img : null;
+      }).filter((img): img is ImageData => img !== null);
+
       await Promise.all(images.map(image => deleteImageFromImgBB(image.deleteUrl)));
     }
 
-    // Delete all products in this category
+    // Delete all products in the category
     await prisma.product.deleteMany({
-      where: { categoryId: id },
+      where: {
+        categoryId: categoryId
+      }
     });
 
-    // Then delete the category
+    // Delete the category
     await prisma.category.delete({
-      where: { id },
+      where: {
+        id: categoryId
+      }
     });
 
-    return NextResponse.json({ message: 'Category, related products, and images deleted successfully' });
+    return NextResponse.json({ message: 'Category deleted successfully' });
   } catch (error) {
     console.error('Error deleting category:', error);
     return NextResponse.json(
