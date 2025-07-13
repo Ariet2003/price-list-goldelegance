@@ -26,150 +26,141 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
   const pathname = usePathname();
 
   return (
-    <>
-      <motion.div 
-        initial={{ opacity: 0, x: -20 }}
-        animate={{ opacity: 1, x: 0 }}
-        transition={{ duration: 0.3, ease: [0.4, 0.0, 0.2, 1] }}
-        className={`
-          w-64 min-h-screen bg-black text-white fixed left-0 top-0 z-50
-          transform transition-transform duration-300 ease-in-out overflow-y-auto
-          ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-        `}
-      >
-        {/* Close button for mobile */}
-        <div className="lg:hidden sticky top-0 right-0 p-4 flex justify-end bg-black z-50">
-          <button
-            onClick={onClose}
-            className="p-2 rounded-lg hover:bg-yellow-900/20 transition-colors"
-          >
-            <X className="w-6 h-6 text-[#e8b923]" />
-          </button>
-        </div>
-
-        <div className="mb-8 p-6 border-b border-yellow-900/20">
-          <Link href="/admin" className="block" onClick={onClose}>
-            <motion.div 
-              className="flex justify-center items-center mb-4"
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ duration: 0.3, delay: 0.1 }}
-            >
-              <Image
-                src="/logo.svg"
-                alt="Gold Elegance"
-                width={120}
-                height={40}
-                className="object-contain"
-              />
-            </motion.div>
-            <motion.div 
-              className="text-center"
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.3, delay: 0.2 }}
-            >
-              <span className="text-xs uppercase tracking-[0.2em] text-yellow-600/80 font-light">
-                Панель управления
-              </span>
-            </motion.div>
-          </Link>
-        </div>
-
-        <nav className="px-4">
-          <ul className="space-y-2">
-            {menuItems.map((item, index) => {
-              const Icon = item.icon;
-              const isActive = pathname === item.href;
-
-              return (
-                <motion.li 
-                  key={item.href}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ duration: 0.3, delay: index * 0.1 }}
-                >
-                  <Link 
-                    href={item.href}
-                    onClick={onClose}
-                    className={`
-                      group flex items-center px-4 py-3 rounded-lg relative
-                      ${isActive 
-                        ? 'bg-gradient-to-r from-yellow-950/50 to-yellow-900/30 border border-yellow-600/30' 
-                        : 'hover:bg-yellow-950/20 border border-transparent hover:border-yellow-900/20'
-                      }
-                    `}
-                  >
-                    {isActive && (
-                      <motion.div
-                        layoutId="activeBackground"
-                        className="absolute inset-0 bg-gradient-to-r from-yellow-950/50 to-yellow-900/30 rounded-lg"
-                        initial={false}
-                        transition={{
-                          type: "spring",
-                          stiffness: 500,
-                          damping: 30
-                        }}
-                      />
-                    )}
-                    
-                    <div className="relative flex items-center w-full">
-                      <Icon 
-                        className={`
-                          w-5 h-5 transition-transform duration-300 group-hover:scale-110
-                          ${isActive ? 'text-yellow-400' : 'text-yellow-600/80'}
-                        `} 
-                      />
-                      <span 
-                        className={`
-                          ml-3 ${playfair.className} tracking-wide
-                          ${isActive ? 'text-yellow-400' : 'text-gray-300 group-hover:text-yellow-500/80'}
-                        `}
-                      >
-                        {item.label}
-                      </span>
-
-                      <div className="absolute right-0 h-full flex items-center">
-                        {isActive && (
-                          <motion.div
-                            layoutId="activeIndicator"
-                            className="w-1 h-8 bg-gradient-to-b from-yellow-400 to-yellow-600 rounded-full"
-                            initial={false}
-                            transition={{
-                              type: "spring",
-                              stiffness: 500,
-                              damping: 30
-                            }}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  </Link>
-                </motion.li>
-              );
-            })}
-          </ul>
-        </nav>
-
-        <motion.div 
-          className="absolute bottom-4 left-0 right-0 text-center"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.3, delay: 0.5 }}
-        >
-          <div className={`text-xs text-yellow-600/60 ${playfair.className}`}>
-            © Gold Elegance {new Date().getFullYear()}
-          </div>
-        </motion.div>
-      </motion.div>
-
-      {/* Overlay for mobile */}
-      {isOpen && (
-        <div
-          className="fixed inset-0 bg-black/50 backdrop-blur-sm lg:hidden z-40"
+    <motion.div 
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.3, ease: [0.4, 0.0, 0.2, 1] }}
+      className={`
+        w-64 min-h-screen bg-black text-white fixed left-0 top-0 z-[50]
+        transform transition-transform duration-300 ease-in-out
+        ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
+      `}
+    >
+      {/* Close button for mobile */}
+      <div className="lg:hidden flex justify-end px-4 py-4">
+        <button
           onClick={onClose}
-        />
-      )}
-    </>
+          className="p-2 rounded-lg hover:bg-yellow-900/20 transition-colors"
+          aria-label="Закрыть меню"
+        >
+          <X className="w-6 h-6 text-[#e8b923]" />
+        </button>
+      </div>
+
+      <div className="mb-8 px-6 pb-6 border-b border-yellow-900/20">
+        <Link href="/admin" className="block" onClick={onClose}>
+          <motion.div 
+            className="flex justify-center items-center mb-4"
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ duration: 0.3, delay: 0.1 }}
+          >
+            <Image
+              src="/logo.svg"
+              alt="Gold Elegance"
+              width={120}
+              height={40}
+              className="object-contain"
+            />
+          </motion.div>
+          <motion.div 
+            className="text-center"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.2 }}
+          >
+            <span className="text-xs uppercase tracking-[0.2em] text-yellow-600/80 font-light">
+              Панель управления
+            </span>
+          </motion.div>
+        </Link>
+      </div>
+
+      <nav className="px-4">
+        <ul className="space-y-2">
+          {menuItems.map((item, index) => {
+            const Icon = item.icon;
+            const isActive = pathname === item.href;
+
+            return (
+              <motion.li 
+                key={item.href}
+                initial={{ opacity: 0, x: -20 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ duration: 0.3, delay: index * 0.1 }}
+              >
+                <Link 
+                  href={item.href}
+                  onClick={onClose}
+                  className={`
+                    group flex items-center px-4 py-3 rounded-lg relative
+                    ${isActive 
+                      ? 'bg-gradient-to-r from-yellow-950/50 to-yellow-900/30 border border-yellow-600/30' 
+                      : 'hover:bg-yellow-950/20 border border-transparent hover:border-yellow-900/20'
+                    }
+                  `}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="activeBackground"
+                      className="absolute inset-0 bg-gradient-to-r from-yellow-950/50 to-yellow-900/30 rounded-lg"
+                      initial={false}
+                      transition={{
+                        type: "spring",
+                        stiffness: 500,
+                        damping: 30
+                      }}
+                    />
+                  )}
+                  
+                  <div className="relative flex items-center w-full">
+                    <Icon 
+                      className={`
+                        w-5 h-5 transition-transform duration-300 group-hover:scale-110
+                        ${isActive ? 'text-yellow-400' : 'text-yellow-600/80'}
+                      `} 
+                    />
+                    <span 
+                      className={`
+                        ml-3 ${playfair.className} tracking-wide
+                        ${isActive ? 'text-yellow-400' : 'text-gray-300 group-hover:text-yellow-500/80'}
+                      `}
+                    >
+                      {item.label}
+                    </span>
+
+                    <div className="absolute right-0 h-full flex items-center">
+                      {isActive && (
+                        <motion.div
+                          layoutId="activeIndicator"
+                          className="w-1 h-8 bg-gradient-to-b from-yellow-400 to-yellow-600 rounded-full"
+                          initial={false}
+                          transition={{
+                            type: "spring",
+                            stiffness: 500,
+                            damping: 30
+                          }}
+                        />
+                      )}
+                    </div>
+                  </div>
+                </Link>
+              </motion.li>
+            );
+          })}
+        </ul>
+      </nav>
+
+      <motion.div 
+        className="absolute bottom-4 left-0 right-0 text-center"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 0.3, delay: 0.5 }}
+      >
+        <div className={`text-xs text-yellow-600/60 ${playfair.className}`}>
+          © Gold Elegance {new Date().getFullYear()}
+        </div>
+      </motion.div>
+    </motion.div>
   );
 } 
