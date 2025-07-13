@@ -1,10 +1,10 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { X, Phone, MessageSquare } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PhoneInput from 'react-phone-number-input';
 import 'react-phone-number-input/style.css';
 import { format } from 'date-fns';
-import { ru } from 'date-fns/locale';
+import Toast from './Toast';
 
 interface OrderModalProps {
   isOpen: boolean;
@@ -32,23 +32,49 @@ export default function OrderModal({
   const [contactType, setContactType] = useState<ContactType>('phone');
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
-  const [showCalendar, setShowCalendar] = useState(false);
+  const [showToast, setShowToast] = useState(false);
+
+  useEffect(() => {
+    if (submitStatus !== 'idle') {
+      setShowToast(true);
+      const timer = setTimeout(() => {
+        setShowToast(false);
+        setSubmitStatus('idle');
+      }, 7000);
+      return () => clearTimeout(timer);
+    }
+  }, [submitStatus]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
+    setSubmitStatus('idle');
     
     try {
-      // Здесь будет API запрос для отправки данных
-      await new Promise(resolve => setTimeout(resolve, 1000)); // Имитация запроса
+      const response = await fetch('/api/send-order', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...formData,
+          contactType,
+          productName,
+          productCategory,
+          productPrice
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to send order');
+      }
+
       setSubmitStatus('success');
-      setTimeout(() => {
-        onClose();
-        setSubmitStatus('idle');
-        setFormData({ name: '', phone: '', eventDate: '', comment: '' });
-        setContactType('phone');
-      }, 2000);
+      onClose();
+      setFormData({ name: '', phone: '', eventDate: '', comment: '' });
+      setContactType('phone');
     } catch (error) {
+      console.error('Error sending order:', error);
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
@@ -60,162 +86,162 @@ export default function OrderModal({
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  const handlePhoneChange = (value: string) => {
+  const handlePhoneChange = (value: string | undefined) => {
     setFormData(prev => ({ ...prev, phone: value || '' }));
   };
 
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
-          onClick={onClose}
-        >
+    <>
+      <AnimatePresence>
+        {isOpen && (
           <motion.div
-            initial={{ scale: 0.95, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.95, opacity: 0 }}
-            className="bg-gradient-to-b from-black to-[#1a1a1a] rounded-xl p-6 w-full max-w-2xl border border-[#976726]/40 shadow-xl shadow-black/50 max-h-[90vh] overflow-y-auto"
-            onClick={e => e.stopPropagation()}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/90 backdrop-blur-md flex items-center justify-center p-4"
+            onClick={onClose}
           >
-            <div className="flex justify-between items-center mb-6">
-              <h2 className="text-2xl font-bold gold-gradient">Оставить заявку</h2>
-              <button
-                onClick={onClose}
-                className="text-[#976726] hover:text-[#e8b923] transition-colors"
-              >
-                <X className="w-6 h-6" />
-              </button>
-            </div>
-
-            <form onSubmit={handleSubmit} className="space-y-3">
-              <div>
-                <label htmlFor="name" className="block text-sm font-medium text-[#e8b923] mb-2">
-                  ФИО *
-                </label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  value={formData.name}
-                  onChange={handleChange}
-                  className="w-full px-4 py-3 bg-black border border-[#976726]/40 rounded-lg focus:outline-none focus:border-[#e8b923] text-white placeholder-[#976726]/60"
-                  placeholder="Введите ваше ФИО"
-                />
+            <motion.div
+              initial={{ scale: 0.95, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.95, opacity: 0 }}
+              className="bg-gradient-to-b from-black to-[#1a1a1a] rounded-xl p-6 w-full max-w-2xl border border-[#976726]/40 shadow-xl shadow-black/50 max-h-[90vh] overflow-y-auto"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="flex justify-between items-center mb-6">
+                <h2 className="text-2xl font-bold gold-gradient">Оставить заявку</h2>
+                <button
+                  onClick={onClose}
+                  className="text-[#976726] hover:text-[#e8b923] transition-colors"
+                >
+                  <X className="w-6 h-6" />
+                </button>
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-[#e8b923] mb-2">
-                  Предпочитаемый способ связи *
-                </label>
-                <div className="grid grid-cols-2 gap-3 mb-3">
-                  <button
-                    type="button"
-                    onClick={() => setContactType('phone')}
-                    className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border transition-all ${
-                      contactType === 'phone'
-                        ? 'border-[#e8b923] bg-[#976726]/30 text-[#e8b923]'
-                        : 'border-[#976726]/40 hover:border-[#976726] text-[#976726] hover:text-[#e8b923]'
-                    }`}
-                  >
-                    <Phone className="w-5 h-5" />
-                    Звонок
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => setContactType('whatsapp')}
-                    className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border transition-all ${
-                      contactType === 'whatsapp'
-                        ? 'border-[#e8b923] bg-[#976726]/30 text-[#e8b923]'
-                        : 'border-[#976726]/40 hover:border-[#976726] text-[#976726] hover:text-[#e8b923]'
-                    }`}
-                  >
-                    <MessageSquare className="w-5 h-5" />
-                    WhatsApp
-                  </button>
-                </div>
-                <div className="mt-2">
-                  <label htmlFor="phone" className="block text-sm font-medium text-[#e8b923] mb-2">
-                    Номер телефона *
+              <form onSubmit={handleSubmit} className="space-y-3">
+                <div>
+                  <label htmlFor="name" className="block text-sm font-medium text-[#e8b923] mb-2">
+                    ФИО *
                   </label>
-                  <PhoneInput
-                    international
-                    defaultCountry="KG"
-                    value={formData.phone}
-                    onChange={handlePhoneChange}
-                    className="phone-input"
-                    required
-                    placeholder="Введите номер телефона"
-                  />
-                </div>
-              </div>
-
-              <div>
-                <label htmlFor="eventDate" className="block text-sm font-medium text-[#e8b923] mb-2">
-                  Дата мероприятия
-                </label>
-                <div className="relative">
                   <input
-                    type="date"
-                    id="eventDate"
-                    name="eventDate"
-                    value={formData.eventDate}
+                    type="text"
+                    id="name"
+                    name="name"
+                    required
+                    value={formData.name}
                     onChange={handleChange}
-                    min={format(new Date(), 'yyyy-MM-dd')}
-                    className={`w-full px-4 py-3 bg-black border border-[#976726]/40 rounded-lg focus:outline-none focus:border-[#e8b923] text-white ${!formData.eventDate && 'text-[#976726]/60'}`}
-                    placeholder="Выберите дату"
-                    onFocus={(e) => e.target.showPicker()}
+                    className="w-full px-4 py-3 bg-black border border-[#976726]/40 rounded-lg focus:outline-none focus:border-[#e8b923] text-white placeholder-[#976726]/60"
+                    placeholder="Введите ваше ФИО"
                   />
-                  {!formData.eventDate && (
-                    <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#976726]/60 pointer-events-none">
-                      Выберите дату
-                    </span>
-                  )}
                 </div>
-              </div>
 
-              <div>
-                <label htmlFor="comment" className="block text-sm font-medium text-[#e8b923] mb-2">
-                  Комментарий
-                </label>
-                <textarea
-                  id="comment"
-                  name="comment"
-                  value={formData.comment}
-                  onChange={handleChange}
-                  rows={3}
-                  className="w-full px-4 py-3 bg-black border border-[#976726]/40 rounded-lg focus:outline-none focus:border-[#e8b923] text-white resize-none placeholder-[#976726]/60"
-                  placeholder="Дополнительная информация"
-                />
-              </div>
+                <div>
+                  <label className="block text-sm font-medium text-[#e8b923] mb-2">
+                    Предпочитаемый способ связи *
+                  </label>
+                  <div className="grid grid-cols-2 gap-3 mb-3">
+                    <button
+                      type="button"
+                      onClick={() => setContactType('phone')}
+                      className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border transition-all ${
+                        contactType === 'phone'
+                          ? 'border-[#e8b923] bg-[#976726]/30 text-[#e8b923]'
+                          : 'border-[#976726]/40 hover:border-[#976726] text-[#976726] hover:text-[#e8b923]'
+                      }`}
+                    >
+                      <Phone className="w-5 h-5" />
+                      Звонок
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setContactType('whatsapp')}
+                      className={`flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border transition-all ${
+                        contactType === 'whatsapp'
+                          ? 'border-[#e8b923] bg-[#976726]/30 text-[#e8b923]'
+                          : 'border-[#976726]/40 hover:border-[#976726] text-[#976726] hover:text-[#e8b923]'
+                      }`}
+                    >
+                      <MessageSquare className="w-5 h-5" />
+                      WhatsApp
+                    </button>
+                  </div>
+                  <div className="mt-2">
+                    <label htmlFor="phone" className="block text-sm font-medium text-[#e8b923] mb-2">
+                      Номер телефона *
+                    </label>
+                    <PhoneInput
+                      international
+                      defaultCountry="KG"
+                      value={formData.phone}
+                      onChange={handlePhoneChange}
+                      className="phone-input"
+                      required
+                      placeholder="Введите номер телефона"
+                    />
+                  </div>
+                </div>
 
-              <button
-                type="submit"
-                disabled={isSubmitting || !formData.phone}
-                className="w-full px-6 py-3 bg-gradient-to-r from-[#976726] to-[#e8b923] text-black font-bold rounded-lg hover:shadow-lg hover:shadow-[#976726]/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {isSubmitting ? 'Отправка...' : 'Отправить заявку'}
-              </button>
+                <div>
+                  <label htmlFor="eventDate" className="block text-sm font-medium text-[#e8b923] mb-2">
+                    Дата мероприятия
+                  </label>
+                  <div className="relative">
+                    <input
+                      type="date"
+                      id="eventDate"
+                      name="eventDate"
+                      value={formData.eventDate}
+                      onChange={handleChange}
+                      min={format(new Date(), 'yyyy-MM-dd')}
+                      className={`w-full px-4 py-3 bg-black border border-[#976726]/40 rounded-lg focus:outline-none focus:border-[#e8b923] text-white ${!formData.eventDate && 'text-[#976726]/60'}`}
+                      placeholder="Выберите дату"
+                    />
+                    {!formData.eventDate && (
+                      <span className="absolute left-4 top-1/2 -translate-y-1/2 text-[#976726]/60 pointer-events-none md:hidden">
+                        Выберите дату
+                      </span>
+                    )}
+                  </div>
+                </div>
 
-              {submitStatus === 'success' && (
-                <p className="text-[#e8b923] text-center font-medium">
-                  Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.
-                </p>
-              )}
+                <div>
+                  <label htmlFor="comment" className="block text-sm font-medium text-[#e8b923] mb-2">
+                    Комментарий
+                  </label>
+                  <textarea
+                    id="comment"
+                    name="comment"
+                    value={formData.comment}
+                    onChange={handleChange}
+                    rows={3}
+                    className="w-full px-4 py-3 bg-black border border-[#976726]/40 rounded-lg focus:outline-none focus:border-[#e8b923] text-white resize-none placeholder-[#976726]/60"
+                    placeholder="Дополнительная информация"
+                  />
+                </div>
 
-              {submitStatus === 'error' && (
-                <p className="text-red-500 text-center">
-                  Произошла ошибка при отправке заявки. Пожалуйста, попробуйте позже.
-                </p>
-              )}
-            </form>
+                <button
+                  type="submit"
+                  disabled={isSubmitting || !formData.phone || !formData.name}
+                  className="w-full px-6 py-3 bg-gradient-to-r from-[#976726] to-[#e8b923] text-black font-bold rounded-lg hover:shadow-lg hover:shadow-[#976726]/30 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {isSubmitting ? 'Отправка...' : 'Отправить заявку'}
+                </button>
+              </form>
+            </motion.div>
           </motion.div>
-        </motion.div>
-      )}
-    </AnimatePresence>
+        )}
+      </AnimatePresence>
+
+      <Toast
+        isVisible={showToast}
+        type={submitStatus === 'success' ? 'success' : 'error'}
+        message={
+          submitStatus === 'success'
+            ? 'Заявка успешно отправлена! Мы свяжемся с вами в ближайшее время.'
+            : 'Произошла ошибка при отправке заявки. Пожалуйста, попробуйте позже.'
+        }
+        onClose={() => setShowToast(false)}
+      />
+    </>
   );
 } 
