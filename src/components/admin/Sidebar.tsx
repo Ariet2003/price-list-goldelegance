@@ -5,7 +5,6 @@ import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { FaBoxes, FaList, FaCog, FaHome } from 'react-icons/fa';
-import { X } from 'lucide-react';
 import { Playfair_Display } from 'next/font/google';
 
 const playfair = Playfair_Display({ subsets: ['latin', 'cyrillic'] });
@@ -17,12 +16,7 @@ const menuItems = [
   { href: '/admin/settings', icon: FaCog, label: 'Настройки' },
 ];
 
-interface SidebarProps {
-  isOpen: boolean;
-  onClose: () => void;
-}
-
-export default function Sidebar({ isOpen, onClose }: SidebarProps) {
+export default function Sidebar() {
   const pathname = usePathname();
 
   return (
@@ -30,25 +24,10 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
       initial={{ opacity: 0, x: -20 }}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.3, ease: [0.4, 0.0, 0.2, 1] }}
-      className={`
-        w-64 min-h-screen bg-black text-white fixed left-0 top-0 z-[50]
-        transform transition-transform duration-300 ease-in-out
-        ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
-      `}
+      className="w-64 min-h-screen bg-black text-white fixed left-0 top-0 z-40"
     >
-      {/* Close button for mobile */}
-      <div className="lg:hidden flex justify-end px-4 py-4">
-        <button
-          onClick={onClose}
-          className="p-2 rounded-lg hover:bg-yellow-900/20 transition-colors"
-          aria-label="Закрыть меню"
-        >
-          <X className="w-6 h-6 text-[#e8b923]" />
-        </button>
-      </div>
-
-      <div className="mb-8 px-6 pb-6 border-b border-yellow-900/20">
-        <Link href="/admin" className="block" onClick={onClose}>
+      <div className="mb-8 p-6 border-b border-yellow-900/20">
+        <Link href="/admin" className="block">
           <motion.div 
             className="flex justify-center items-center mb-4"
             initial={{ scale: 0.9, opacity: 0 }}
@@ -91,7 +70,6 @@ export default function Sidebar({ isOpen, onClose }: SidebarProps) {
               >
                 <Link 
                   href={item.href}
-                  onClick={onClose}
                   className={`
                     group flex items-center px-4 py-3 rounded-lg relative
                     ${isActive 
