@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
+export const runtime = 'nodejs';
+
 export async function GET() {
   try {
     // Get total counts
@@ -52,9 +54,9 @@ export async function GET() {
       stockStatusData
     });
   } catch (error) {
-    console.error('Error fetching stats:', error);
+    console.error('[STATS_API_ERROR]', error);
     return NextResponse.json(
-      { error: 'Failed to fetch statistics' },
+      { error: 'Failed to fetch statistics. Please try again later.' },
       { status: 500 }
     );
   }
