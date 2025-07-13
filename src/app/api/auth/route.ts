@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
-import prisma from '@/lib/prisma';
+import { PrismaClient } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
 import { SignJWT } from 'jose';
 
-export const runtime = 'nodejs';
+const prisma = new PrismaClient();
 
 // Секретный ключ для JWT
 const secret = new TextEncoder().encode(
@@ -14,13 +14,7 @@ const secret = new TextEncoder().encode(
 export async function POST(request: Request) {
   try {
     const { password } = await request.json();
-    
-    if (!password) {
-      return NextResponse.json(
-        { error: 'Пароль обязателен' },
-        { status: 400 }
-      );
-    }
+    console.log('Received password attempt');
 
     // Получаем хешированный пароль из базы
     const setting = await prisma.settings.findUnique({
@@ -30,24 +24,26 @@ export async function POST(request: Request) {
     });
 
     if (!setting) {
-      console.error('[AUTH_API_ERROR] No account setting found in database');
+      console.log('No account setting found in database');
       return NextResponse.json(
         { error: 'Неверный пароль' },
         { status: 401 }
       );
     }
 
+    console.log('Found account setting, comparing passwords');
     // Проверяем пароль
     const isValid = await bcrypt.compare(password, setting.value);
 
     if (!isValid) {
-      console.error('[AUTH_API_ERROR] Invalid password attempt');
+      console.log('Password comparison failed');
       return NextResponse.json(
         { error: 'Неверный пароль' },
         { status: 401 }
       );
     }
 
+    console.log('Password is valid, generating token');
     // Создаем JWT токен используя jose
     const token = await new SignJWT({ 
       role: 'admin',
@@ -57,19 +53,24 @@ export async function POST(request: Request) {
       .setExpirationTime('24h')
       .sign(secret);
 
+    console.log('Token generated, setting cookie');
     // Устанавливаем куки с токеном
     cookies().set('admin-token', token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
+      sameSite: 'lax', // Изменили на lax для лучшей совместимости
       maxAge: 60 * 60 * 24 // 24 часа
     });
 
-    return NextResponse.json({ success: true });
+    console.log('Cookie set, returning success response');
+    return NextResponse.json({ 
+      success: true,
+      token // Временно возвращаем токен для отладки
+    });
   } catch (error) {
-    console.error('[AUTH_API_ERROR]', error);
+    console.error('Auth error:', error);
     return NextResponse.json(
-      { error: 'Ошибка сервера. Пожалуйста, попробуйте позже.' },
+      { error: 'Ошибка сервера', details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
   }

@@ -1,9 +1,6 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-// Configure route to use Node.js runtime
-export const runtime = 'nodejs';
-
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
@@ -43,7 +40,7 @@ export async function GET(request: Request) {
   } catch (error) {
     console.error('Error fetching products:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to fetch products' },
+      { error: 'Failed to fetch products' },
       { status: 500 }
     );
   }
@@ -54,58 +51,14 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { name, description, price, categoryId, inStock, images } = body;
 
-    // Validate required fields
-    if (!name || typeof name !== 'string' || name.trim().length === 0) {
-      return NextResponse.json(
-        { error: 'Product name is required' },
-        { status: 400 }
-      );
-    }
-
-    if (!description || typeof description !== 'string') {
-      return NextResponse.json(
-        { error: 'Product description is required' },
-        { status: 400 }
-      );
-    }
-
-    if (!price || typeof price !== 'number' || price <= 0) {
-      return NextResponse.json(
-        { error: 'Valid product price is required' },
-        { status: 400 }
-      );
-    }
-
-    if (!categoryId || typeof categoryId !== 'number') {
-      return NextResponse.json(
-        { error: 'Valid category ID is required' },
-        { status: 400 }
-      );
-    }
-
-    // Check if category exists
-    const category = await prisma.category.findUnique({
-      where: {
-        id: categoryId
-      }
-    });
-
-    if (!category) {
-      return NextResponse.json(
-        { error: 'Selected category does not exist' },
-        { status: 400 }
-      );
-    }
-
-    // Create the product
     const product = await prisma.product.create({
       data: {
-        name: name.trim(),
+        name,
         description,
         price,
         categoryId,
-        inStock: inStock ?? true,
-        images: images || [],
+        inStock,
+        images,
       },
     });
 
@@ -113,7 +66,7 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error('Error creating product:', error);
     return NextResponse.json(
-      { error: error instanceof Error ? error.message : 'Failed to create product' },
+      { error: 'Failed to create product' },
       { status: 500 }
     );
   }
