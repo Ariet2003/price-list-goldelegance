@@ -4,13 +4,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { FaBoxes, FaList, FaCog } from 'react-icons/fa';
+import { FaBoxes, FaList, FaCog, FaHome } from 'react-icons/fa';
 import { Playfair_Display } from 'next/font/google';
 
 const playfair = Playfair_Display({ subsets: ['latin', 'cyrillic'] });
 
 const menuItems = [
-  { href: '/admin', icon: FaBoxes, label: 'Дашборд' },
+  { href: '/admin', icon: FaHome, label: 'Дашборд' },
   { href: '/admin/products', icon: FaBoxes, label: 'Товары' },
   { href: '/admin/categories', icon: FaList, label: 'Категории' },
   { href: '/admin/settings', icon: FaCog, label: 'Настройки' },

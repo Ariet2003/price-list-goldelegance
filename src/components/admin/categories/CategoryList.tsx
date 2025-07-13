@@ -179,22 +179,24 @@ const CategoryList = forwardRef<CategoryListRef, CategoryListProps>(function Cat
       </div>
 
       {editingCategory && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="bg-black/50 backdrop-blur-lg rounded-xl border border-[#976726]/20 p-6 w-full max-w-xl max-h-[90vh] overflow-y-auto"
-          >
-            <CategoryForm 
-              initialData={editingCategory}
-              onClose={() => setEditingCategory(null)}
-              onSuccess={() => {
-                fetchCategories(pagination.currentPage);
-                setEditingCategory(null);
-              }}
-            />
-          </motion.div>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50">
+          <div className="flex items-center justify-center min-h-screen p-4">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-2xl p-6 -mt-80 bg-black/50 backdrop-blur-lg rounded-xl border border-[#976726]/20 overflow-y-auto max-h-[85vh]"
+            >
+              <CategoryForm 
+                initialData={editingCategory}
+                onClose={() => setEditingCategory(null)}
+                onSuccess={() => {
+                  fetchCategories(pagination.currentPage);
+                  setEditingCategory(null);
+                }}
+              />
+            </motion.div>
+          </div>
         </div>
       )}
 
