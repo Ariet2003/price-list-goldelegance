@@ -42,29 +42,44 @@ export default function ChartCard({ title, data, delay = 0 }: ChartCardProps) {
             </Pie>
             <Tooltip
               contentStyle={{
-                backgroundColor: 'rgba(0,0,0,0.8)',
-                border: '1px solid rgba(245, 158, 11, 0.2)',
+                backgroundColor: 'rgba(17, 17, 17, 0.95)',
+                border: '1px solid rgba(151, 103, 38, 0.4)',
                 borderRadius: '8px',
-                color: '#F59E0B'
+                padding: '8px 12px',
+                boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
               }}
-              formatter={(value: number) => [`${value} (${((value / total) * 100).toFixed(1)}%)`, '']}
+              itemStyle={{
+                color: '#e8b923',
+                fontSize: '14px',
+                fontWeight: '500',
+              }}
+              formatter={(value: number) => [
+                `${value} (${((value / total) * 100).toFixed(1)}%)`,
+                'Количество'
+              ]}
+              labelStyle={{
+                color: '#e8b923',
+                fontWeight: '600',
+                marginBottom: '4px',
+              }}
             />
           </PieChart>
         </ResponsiveContainer>
       </div>
-      <div className="mt-4 space-y-2">
-        {data.map((item, index) => (
-          <div key={item.name} className="flex items-center justify-between text-sm">
-            <div className="flex items-center">
+      
+      <div className="overflow-x-auto scrollbar-thin scrollbar-thumb-[#976726] scrollbar-track-black/20">
+        <div className="flex space-x-4 pb-2">
+          {data.map((item, index) => (
+            <div key={item.name} className="flex items-center whitespace-nowrap bg-black/20 px-3 py-2 rounded-lg">
               <div 
                 className="w-3 h-3 rounded-full mr-2" 
                 style={{ backgroundColor: COLORS[index % COLORS.length] }}
               />
-              <span className="text-gray-300">{item.name}</span>
+              <span className="text-gray-300 mr-2">{item.name}</span>
+              <span className="text-yellow-600/80">{item.value}</span>
             </div>
-            <span className="text-yellow-600/80">{item.value}</span>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </motion.div>
   );

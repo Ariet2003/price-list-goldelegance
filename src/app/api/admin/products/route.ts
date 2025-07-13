@@ -1,22 +1,42 @@
 import { NextResponse } from 'next/server';
 import prisma from '@/lib/prisma';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
-    const products = await prisma.product.findMany({
-      include: {
-        category: {
-          select: {
-            name: true,
+    const { searchParams } = new URL(request.url);
+    const page = parseInt(searchParams.get('page') || '1');
+    const perPage = 50;
+    const skip = (page - 1) * perPage;
+
+    const [products, total] = await Promise.all([
+      prisma.product.findMany({
+        skip,
+        take: perPage,
+        include: {
+          category: {
+            select: {
+              name: true,
+            },
           },
         },
-      },
-      orderBy: {
-        createdAt: 'desc',
+        orderBy: {
+          createdAt: 'desc',
+        },
+      }),
+      prisma.product.count(),
+    ]);
+
+    const totalPages = Math.ceil(total / perPage);
+
+    return NextResponse.json({
+      products,
+      pagination: {
+        total,
+        pages: totalPages,
+        currentPage: page,
+        perPage,
       },
     });
-
-    return NextResponse.json(products);
   } catch (error) {
     console.error('Error fetching products:', error);
     return NextResponse.json(

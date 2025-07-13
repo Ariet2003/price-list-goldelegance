@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server';
 
-const IMGBB_API_KEY = 'daa4de6fd2fbca0479cffbde3c34bf09';
+if (!process.env.IMGBB_API_KEY) {
+  throw new Error('IMGBB_API_KEY is not defined in environment variables');
+}
 
 export async function POST(request: Request) {
   try {
@@ -11,7 +13,7 @@ export async function POST(request: Request) {
     const uploadPromises = images.map(async (image: any, index) => {
       // Create form data for ImgBB
       const imgbbFormData = new FormData();
-      imgbbFormData.append('key', IMGBB_API_KEY);
+      imgbbFormData.append('key', process.env.IMGBB_API_KEY as string);
       
       // Convert Blob to File if needed and append
       const imageFile = image instanceof File ? image : new File([image], 'image.jpg', { type: image.type || 'image/jpeg' });

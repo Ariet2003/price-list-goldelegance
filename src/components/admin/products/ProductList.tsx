@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { motion } from 'framer-motion';
 import ConfirmModal from '../shared/ConfirmModal';
 import ProductForm from './ProductForm';
+import Pagination from '../shared/Pagination';
 
 interface ImageData {
   url: string;
@@ -23,20 +24,30 @@ interface Product {
   inStock: boolean;
 }
 
+interface PaginationData {
+  total: number;
+  pages: number;
+  currentPage: number;
+  perPage: number;
+}
+
 export default function ProductList() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [deletingProduct, setDeletingProduct] = useState<Product | null>(null);
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [pagination, setPagination] = useState<PaginationData>({
+    total: 0,
+    pages: 1,
+    currentPage: 1,
+    perPage: 50,
+  });
 
-  useEffect(() => {
-    fetchProducts();
-  }, []);
-
-  const fetchProducts = async () => {
+  const fetchProducts = async (page = pagination.currentPage) => {
     try {
-      const response = await fetch('/api/admin/products');
+      setLoading(true);
+      const response = await fetch(`/api/admin/products?page=${page}`);
       if (!response.ok) {
         const errorData = await response.json();
         console.error('Server error:', errorData);
@@ -47,7 +58,7 @@ export default function ProductList() {
       console.log('Raw data from server:', data);
 
       // Преобразуем строки JSON в объекты
-      const processedData = data.map((product: any) => {
+      const processedData = data.products.map((product: any) => {
         console.log('Processing product:', product);
         try {
           return {
@@ -74,6 +85,7 @@ export default function ProductList() {
 
       console.log('Processed data:', processedData);
       setProducts(processedData);
+      setPagination(data.pagination);
     } catch (error) {
       console.error('Full error details:', error);
       setError(error instanceof Error ? error.message : 'Ошибка при загрузке товаров');
@@ -81,6 +93,10 @@ export default function ProductList() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   const handleDelete = async (product: Product) => {
     try {
@@ -100,6 +116,10 @@ export default function ProductList() {
     }
   };
 
+  const handlePageChange = (page: number) => {
+    fetchProducts(page);
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-64">
@@ -114,7 +134,7 @@ export default function ProductList() {
         <AlertCircle className="w-8 h-8 mb-2" />
         <p className="text-center">{error}</p>
         <button 
-          onClick={fetchProducts}
+          onClick={() => fetchProducts()}
           className="mt-4 px-4 py-2 bg-[#976726]/20 hover:bg-[#976726]/30 rounded-lg transition-colors text-[#e8b923]"
         >
           Попробовать снова
@@ -251,23 +271,33 @@ export default function ProductList() {
       />
 
       {editingProduct && (
-        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-60">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="bg-black/50 backdrop-blur-lg rounded-xl border border-[#976726]/20 p-6 w-full max-w-2xl max-h-[70vh] overflow-y-auto"
-          >
-            <ProductForm 
-              initialData={editingProduct}
-              onClose={() => {
-                setEditingProduct(null);
-                fetchProducts();
-              }}
-            />
-          </motion.div>
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-50">
+          <div className="flex items-center justify-center min-h-screen p-4">
+            <motion.div 
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="w-full max-w-2xl p-6 -mt-80 bg-black/50 backdrop-blur-lg rounded-xl border border-[#976726]/20 overflow-y-auto max-h-[85vh]"
+            >
+              <ProductForm 
+                initialData={editingProduct}
+                onClose={() => {
+                  setEditingProduct(null);
+                  fetchProducts();
+                }}
+              />
+            </motion.div>
+          </div>
         </div>
       )}
+
+      <div className="mt-6">
+        <Pagination
+          currentPage={pagination.currentPage}
+          totalPages={pagination.pages}
+          onPageChange={handlePageChange}
+        />
+      </div>
     </>
   );
 } 

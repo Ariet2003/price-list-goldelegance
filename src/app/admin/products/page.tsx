@@ -38,14 +38,18 @@ export default function ProductsPage() {
 
       {isFormOpen && (
         <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.95 }}
-            className="bg-black/50 backdrop-blur-lg rounded-xl border border-[#976726]/20 p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto"
-          >
-            <ProductForm onClose={() => setIsFormOpen(false)} />
-          </motion.div>
+          <div className="fixed inset-0 overflow-y-auto">
+            <div className="flex min-h-full items-center justify-center p-4">
+              <motion.div 
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.95 }}
+                className="bg-black/50 backdrop-blur-lg rounded-xl border border-[#976726]/20 p-6 w-full max-w-2xl max-h-[90vh] overflow-y-auto relative"
+              >
+                <ProductForm onClose={() => setIsFormOpen(false)} />
+              </motion.div>
+            </div>
+          </div>
         </div>
       )}
 

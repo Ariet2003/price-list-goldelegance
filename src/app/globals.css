@@ -59,13 +59,25 @@
   }
 }
 
+/* Custom Scrollbar Styles */
 @layer utilities {
-  .scrollbar-hide {
-    -ms-overflow-style: none;
-    scrollbar-width: none;
+  .scrollbar-thin::-webkit-scrollbar {
+    height: 6px;
+    width: 6px;
   }
-  .scrollbar-hide::-webkit-scrollbar {
-    display: none;
+
+  .scrollbar-thin::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb {
+    background: #976726;
+    border-radius: 3px;
+  }
+
+  .scrollbar-thin::-webkit-scrollbar-thumb:hover {
+    background: #e8b923;
   }
 }
 
