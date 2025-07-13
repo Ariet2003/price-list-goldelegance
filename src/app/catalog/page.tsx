@@ -539,7 +539,8 @@ export default function CatalogPage() {
                     key={product.id}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
-                    className="bg-black/40 backdrop-blur-sm rounded-xl border border-[#976726]/20 overflow-hidden hover:border-[#976726]/40 transition-all duration-500 group"
+                    className="bg-black/40 backdrop-blur-sm rounded-xl border border-[#976726]/20 overflow-hidden hover:border-[#976726]/40 transition-all duration-500 group cursor-pointer"
+                    onClick={() => router.push(`/catalog/${product.id}`)}
                   >
                     <div className="relative h-32 xs:h-40 sm:h-56 lg:h-64 overflow-hidden">
                       <Image
@@ -556,7 +557,7 @@ export default function CatalogPage() {
                         </div>
                       )}
                     </div>
-                    <div className="p-2 sm:p-4 lg:p-6">
+                    <div className="p-3 sm:p-4">
                       <h3 className="text-base sm:text-lg lg:text-xl font-semibold text-[#e8b923] mb-2 group-hover:text-[#e8b923]/80 transition-colors line-clamp-2">
                         {product.name}
                       </h3>
@@ -570,7 +571,10 @@ export default function CatalogPage() {
                         <motion.button
                           whileHover={{ scale: 1.05 }}
                           whileTap={{ scale: 0.95 }}
-                          onClick={() => router.push(`/catalog/${product.id}`)}
+                          onClick={(e) => {
+                            e.stopPropagation(); // Предотвращаем всплытие события
+                            router.push(`/catalog/${product.id}`);
+                          }}
                           className="px-2 sm:px-4 py-1.5 sm:py-2 bg-gradient-to-r from-[#976726] to-[#e8b923] text-black text-sm sm:text-base font-medium rounded-lg hover:shadow-lg hover:shadow-[#976726]/20 transition-shadow"
                         >
                           Посмотреть
